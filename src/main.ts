@@ -28,6 +28,9 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
+  /** Had to add this to solve module not found error in Vercels */
+  console.log(hbs);
+
   const config = new DocumentBuilder()
     .setTitle('Ecom-API')
     .setDescription(
