@@ -5,6 +5,7 @@ import { Product } from '../entities/product.entity';
 import { DATABASE_OPENAPI } from 'src/core/config/databases';
 import { CreateProductDto, UpdateProductDto } from '../dto/product.dto';
 import { instanceToPlain } from 'class-transformer';
+import { AuthDetailsObject } from 'src/core/guards/auth/auth-details-object';
 
 @Injectable()
 export class ProductsService {
@@ -20,13 +21,18 @@ export class ProductsService {
   async findById(id: string): Promise<Product> {
     return this.productsRepository.findOne({
       where: {
-        product_uuid: id,
+        uuid: id,
       },
     });
   }
 
-  async create(productData: CreateProductDto): Promise<any> {
+  async create(
+    authDetails: AuthDetailsObject,
+    productData: CreateProductDto,
+  ): Promise<any> {
     const data = instanceToPlain(productData);
+    data.org_uuid = authDetails.org_uuid;
+    data.user_uuid = authDetails.uuid;
     const newProducts = this.productsRepository.create(data);
     return this.productsRepository.save(newProducts);
   }

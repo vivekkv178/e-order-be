@@ -9,42 +9,38 @@ import {
   IsUUID,
 } from 'class-validator';
 
-export class CreateProductDto {
+export class OrderItem {
   @ApiProperty({
-    description: 'Name of the product',
-    example: 'Awesome Product',
+    example: 'c7b5a694-d5ff-4d0c-bcd0-8e0af25f1bfc',
+    description: 'The UUID of the organization',
   })
-  @IsNotEmpty()
-  @IsString()
+  @IsUUID()
   @Expose()
-  name: string;
+  @IsNotEmpty()
+  product_uuid?: string;
 
   @ApiPropertyOptional({
-    description: 'Description of the product',
-    example: 'Product Description',
+    description: 'Quantity of the product',
+    example: 2,
   })
-  @IsOptional()
-  @IsString()
-  @Expose()
-  description?: string;
-
-  @ApiProperty({ description: 'Price of the product', example: 100.5 })
   @IsNotEmpty()
-  @IsNumber({ maxDecimalPlaces: 2 })
+  @IsNumber()
   @Expose()
-  price: number;
-
-  @ApiPropertyOptional({
-    description: 'Status of product availability',
-    example: true,
-  })
-  @IsOptional()
-  @IsBoolean()
-  @Expose()
-  is_active?: boolean;
+  quantity?: number;
 }
 
-export class UpdateProductDto {
+export class CreateOrderDto {
+  @ApiProperty({
+    type: OrderItem,
+    isArray: true,
+    description: 'Order Items',
+  })
+  @Expose()
+  @IsNotEmpty()
+  ordert_items?: OrderItem[];
+}
+
+export class UpdateOrderDto {
   @ApiProperty({
     example: 'c7b5a694-d5ff-4d0c-bcd0-8e0af25f1bfc',
     description: 'The UUID of the organization',
@@ -55,7 +51,7 @@ export class UpdateProductDto {
 
   @ApiPropertyOptional({
     description: 'Updated name of the product',
-    example: 'Updated Product',
+    example: 'Updated Order',
   })
   @IsOptional()
   @IsString()
@@ -90,7 +86,7 @@ export class UpdateProductDto {
   is_active?: boolean;
 }
 
-export class GetProductDto {
+export class GetOrderDto {
   @ApiProperty({ description: 'UUID of the product to retrieve', example: 1 })
   @IsNotEmpty()
   @IsUUID()
@@ -98,7 +94,7 @@ export class GetProductDto {
   uuid: string;
 }
 
-export class DeleteProductDto {
+export class DeleteOrderDto {
   @ApiProperty({ description: 'UUID of the product to delete', example: 1 })
   @IsNotEmpty()
   @IsNumber()
@@ -106,18 +102,18 @@ export class DeleteProductDto {
   uuid: string;
 }
 
-export class CreateProductSuccess {
+export class CreateOrderSuccess {
   @ApiPropertyOptional({
     description: 'Success Message',
-    example: 'Product Added Successfully.',
+    example: 'Order Added Successfully.',
   })
   message: string;
 }
 
-export class CreateProductDuplicateError {
+export class CreateOrderDuplicateError {
   @ApiPropertyOptional({
     description: 'Error Message',
-    example: 'Product Name already exists.',
+    example: 'Order Name already exists.',
   })
   message: string;
   @ApiPropertyOptional({
@@ -127,7 +123,7 @@ export class CreateProductDuplicateError {
   ecommErrorCode: string;
 }
 
-export class CreateProductValidationError {
+export class CreateOrderValidationError {
   @ApiPropertyOptional({
     description: 'Validation Errors',
     example: ['name should not be empty'],

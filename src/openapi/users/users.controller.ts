@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
@@ -41,9 +42,12 @@ import {
   GetUserDto,
   UpdateUserDto,
 } from '../dto/user.dto';
+import { AuthGuard } from 'src/core/guards/auth/auth.guard';
 
 @ApiTags(OPEN_API_TAGS.USER)
-@ApiSecurity(OPEN_API_TAGS.API_KEY_HEADER)
+// @ApiSecurity(OPEN_API_TAGS.API_KEY_HEADER)
+@ApiSecurity(OPEN_API_TAGS.API_TOKEN_HEADER)
+@UseGuards(AuthGuard)
 @Controller(`${OPEN_API_RESOURCES.CONFIG}${OPEN_API_PATHS.USER}`)
 export class UsersController {
   constructor(private readonly organizationsService: UsersService) {}

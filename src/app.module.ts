@@ -3,9 +3,11 @@ import { DocsModule } from './docs/docs.module';
 import { CoreModule } from './core/core.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_FILTER } from '@nestjs/core';
 
 import databases, { DATABASE_OPENAPI } from './core/config/databases';
 import { OpenApiModule } from './openapi/openapi.module';
+import { AllExceptionFilter } from './core/filters/all-exception-filter';
 
 @Module({
   imports: [
@@ -24,6 +26,11 @@ import { OpenApiModule } from './openapi/openapi.module';
     OpenApiModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

@@ -10,12 +10,32 @@ import { Organization } from './entities/organization.entity';
 import { ProductsController } from './products/products.controller';
 import { ProductsService } from './products/products.service';
 import { Product } from './entities/product.entity';
+import { Order } from './entities/order.entity';
+import { OrdersController } from './orders/orders.controller';
+import { OrdersService } from './orders/orders.service';
+import { OrderItem } from './entities/order-item.entity';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Organization, User, Product], DATABASE_OPENAPI),
+    TypeOrmModule.forFeature(
+      [Organization, User, Product, Order, OrderItem],
+      DATABASE_OPENAPI,
+    ),
+    JwtModule,
   ],
-  controllers: [OrganizationsController, UsersController, ProductsController],
-  providers: [OrganizationsService, UsersService, ProductsService],
+  controllers: [
+    OrganizationsController,
+    UsersController,
+    ProductsController,
+    OrdersController,
+  ],
+  providers: [
+    OrganizationsService,
+    UsersService,
+    ProductsService,
+    OrdersService,
+    JwtService,
+  ],
 })
 export class OpenApiModule {}

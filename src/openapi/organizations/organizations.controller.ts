@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { OrganizationsService } from './organizations.service';
 import { Organization } from '../entities/organization.entity';
@@ -40,10 +41,13 @@ import {
   InternalServerError,
   UnauthorizedError,
 } from 'src/core/errors/open-api-error';
+import { AuthGuard } from 'src/core/guards/auth/auth.guard';
 
 @ApiTags(OPEN_API_TAGS.ORGANIZATION)
-@ApiSecurity(OPEN_API_TAGS.API_KEY_HEADER)
+// @ApiSecurity(OPEN_API_TAGS.API_KEY_HEADER)
+@ApiSecurity(OPEN_API_TAGS.API_TOKEN_HEADER)
 @Controller(`${OPEN_API_RESOURCES.CONFIG}${OPEN_API_PATHS.ORGANIZATION}`)
+@UseGuards(AuthGuard)
 export class OrganizationsController {
   constructor(private readonly organizationsService: OrganizationsService) {}
   @ApiOperation({

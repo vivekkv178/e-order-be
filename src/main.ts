@@ -28,7 +28,7 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
-  /** Had to add this to solve module not found error in Vercels */
+  /** Had to add this to solve module not found error in Vercel */
   console.log(hbs);
 
   const config = new DocumentBuilder()
@@ -44,6 +44,14 @@ async function bootstrap() {
         in: 'header',
       },
       'ApiKeyHeader',
+    )
+    .addBearerAuth(
+      {
+        type: 'oauth2',
+        description: 'Bearer token authentication',
+        in: 'header',
+      },
+      'ApiTokenHeader',
     )
     .setVersion('1.0')
     // .addServer('https://google.com')

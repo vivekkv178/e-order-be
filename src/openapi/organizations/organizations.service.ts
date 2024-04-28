@@ -1,3 +1,4 @@
+import { UsersService } from './../users/users.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -14,6 +15,7 @@ export class OrganizationsService {
   constructor(
     @InjectRepository(Organization, DATABASE_OPENAPI)
     private readonly organizationsRepository: Repository<Organization>,
+    private readonly usersService: UsersService,
   ) {}
 
   async findAll(): Promise<Organization[]> {
@@ -25,13 +27,29 @@ export class OrganizationsService {
       where: {
         uuid: id,
       },
+      relations: ['user'],
     });
   }
 
   async create(organizationsData: CreateOrganizationDto): Promise<any> {
     const data = instanceToPlain(organizationsData);
     const newOrganizations = this.organizationsRepository.create(data);
-    return this.organizationsRepository.save(newOrganizations);
+    const orgData = await this.organizationsRepository.save(newOrganizations);
+    const userName = organizationsData.email?.split('@')[0];
+    const userData = await this.usersService.create({
+      username: userName,
+      email: organizationsData.email,
+      full_name: userName,
+      role: 'ORG_ADMIN',
+      is_active: true,
+      is_org_admin: true,
+      is_org_user: true,
+      org_uuid: orgData?.uuid,
+    });
+
+    console.log(userData, orgData);
+
+    return { ...orgData, ...userData };
   }
 
   async update(

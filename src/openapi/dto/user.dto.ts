@@ -49,6 +49,39 @@ export class CreateUserDto {
   @IsOptional()
   @Expose()
   is_active?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Whether the user is active',
+    example: true,
+  })
+  @IsOptional()
+  @Expose()
+  is_org_user?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Whether the user is active',
+    example: true,
+  })
+  @IsOptional()
+  @Expose()
+  is_org_admin?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Whether the user is active',
+    example: true,
+  })
+  @IsOptional()
+  @Expose()
+  is_customer?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Whether the user is active',
+    example: true,
+  })
+  @IsOptional()
+  @Expose()
+  @IsUUID()
+  org_uuid?: string;
 }
 
 export class UpdateUserDto {

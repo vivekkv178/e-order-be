@@ -7,6 +7,8 @@ import {
   Param,
   Body,
   HttpCode,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from '../entities/product.entity';
@@ -28,9 +30,9 @@ import {
   OPEN_API_TAGS,
 } from 'src/core/constants/constants';
 import {
-  CreateProdcutDuplicateError,
-  CreateProdcutSuccess,
-  CreateProdcutValidationError,
+  CreateProductDuplicateError,
+  CreateProductSuccess,
+  CreateProductValidationError,
   CreateProductDto,
   GetProductDto,
   UpdateProductDto,
@@ -40,9 +42,12 @@ import {
   InternalServerError,
   UnauthorizedError,
 } from 'src/core/errors/open-api-error';
+import { AuthGuard } from 'src/core/guards/auth/auth.guard';
 
 @ApiTags(OPEN_API_TAGS.PRODUCT)
-@ApiSecurity(OPEN_API_TAGS.API_KEY_HEADER)
+// @ApiSecurity(OPEN_API_TAGS.API_KEY_HEADER)
+@ApiSecurity(OPEN_API_TAGS.API_TOKEN_HEADER)
+@UseGuards(AuthGuard)
 @Controller(`${OPEN_API_RESOURCES.ECOMM}${OPEN_API_PATHS.PRODUCT}`)
 export class ProductsController {
   constructor(private readonly organizationsService: ProductsService) {}
@@ -51,13 +56,13 @@ export class ProductsController {
     summary: 'Product - Create',
   })
   @ApiResponse({
-    type: CreateProdcutSuccess,
+    type: CreateProductSuccess,
     status: 200,
   })
-  @ApiExtraModels(CreateProdcutDuplicateError, CreateProdcutValidationError)
+  @ApiExtraModels(CreateProductDuplicateError, CreateProductValidationError)
   @ApiBadRequestResponse({
     schema: {
-      anyOf: refs(CreateProdcutDuplicateError, CreateProdcutValidationError),
+      anyOf: refs(CreateProductDuplicateError, CreateProductValidationError),
     },
   })
   @ApiInternalServerErrorResponse({
@@ -71,9 +76,11 @@ export class ProductsController {
   })
   @HttpCode(200)
   @Post()
-  async create(@Body() productData: CreateProductDto): Promise<Product> {
-    console.log(productData);
-    return this.organizationsService.create(productData);
+  async create(
+    @Request() req: any,
+    @Body() productData: CreateProductDto,
+  ): Promise<Partial<Product>> {
+    return this.organizationsService.create(req.authDetails, productData);
   }
 
   @Get()

@@ -10,34 +10,42 @@ import { User } from '../entities/user.entity';
 export class UsersService {
   constructor(
     @InjectRepository(User, DATABASE_OPENAPI)
-    private readonly organizationsRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async findAll(): Promise<User[]> {
-    return this.organizationsRepository.find();
+    return this.userRepository.find();
   }
 
   async findById(id: string): Promise<User> {
-    return this.organizationsRepository.findOne({
+    return this.userRepository.findOne({
       where: {
         uuid: id,
       },
     });
   }
 
-  async create(organizationsData: CreateUserDto): Promise<any> {
-    const data = instanceToPlain(organizationsData);
-    const newUsers = this.organizationsRepository.create(data);
-    return this.organizationsRepository.save(newUsers);
+  async findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: {
+        email: email,
+      },
+    });
   }
 
-  async update(organizationsData: UpdateUserDto): Promise<User> {
-    const data = instanceToPlain(organizationsData);
-    await this.organizationsRepository.update(data.uuid, data);
+  async create(userData: CreateUserDto): Promise<any> {
+    const data = instanceToPlain(userData);
+    const newUsers = this.userRepository.create(data);
+    return this.userRepository.save(newUsers);
+  }
+
+  async update(userData: UpdateUserDto): Promise<User> {
+    const data = instanceToPlain(userData);
+    await this.userRepository.update(data.uuid, data);
     return this.findById(`${data.uuid}`);
   }
 
   async delete(id: string): Promise<void> {
-    await this.organizationsRepository.delete(id);
+    await this.userRepository.delete(id);
   }
 }
