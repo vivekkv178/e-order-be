@@ -51,7 +51,7 @@ export class UpdateProductDto {
   })
   @IsUUID()
   @Expose()
-  product_uuid?: string;
+  uuid?: string;
 
   @ApiPropertyOptional({
     description: 'Updated name of the product',
@@ -88,6 +88,14 @@ export class UpdateProductDto {
   @IsBoolean()
   @Expose()
   is_active?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Image Url of the product',
+    example: 'https://acme.com/image.png',
+  })
+  @IsOptional()
+  @Expose()
+  image_url?: string;
 }
 
 export class GetProductDto {

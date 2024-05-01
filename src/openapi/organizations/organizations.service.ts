@@ -19,7 +19,11 @@ export class OrganizationsService {
   ) {}
 
   async findAll(): Promise<Organization[]> {
-    return this.organizationsRepository.find();
+    return this.organizationsRepository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   async findById(id: string): Promise<Organization> {

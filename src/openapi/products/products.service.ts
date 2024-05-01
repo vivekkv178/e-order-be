@@ -15,7 +15,11 @@ export class ProductsService {
   ) {}
 
   async findAll(): Promise<Product[]> {
-    return this.productsRepository.find();
+    return this.productsRepository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   async findById(id: string): Promise<Product> {
@@ -39,8 +43,8 @@ export class ProductsService {
 
   async update(productData: UpdateProductDto): Promise<Product> {
     const data = instanceToPlain(productData);
-    await this.productsRepository.update(data.product_uuid, data);
-    return this.findById(`${data.product_uuid}`);
+    await this.productsRepository.update(data.uuid, data);
+    return this.findById(`${data.uuid}`);
   }
 
   async delete(id: string): Promise<void> {

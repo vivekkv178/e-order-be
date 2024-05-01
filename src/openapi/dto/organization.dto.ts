@@ -83,6 +83,15 @@ export class CreateOrganizationDto {
   @IsString()
   @Expose()
   website?: string;
+
+  @ApiPropertyOptional({
+    example: 'https://www.acme.com',
+    description: 'The logo URL of the organization',
+  })
+  @IsOptional()
+  @IsString()
+  @Expose()
+  logo?: string;
 }
 
 export class UpdateOrganizationDto {
