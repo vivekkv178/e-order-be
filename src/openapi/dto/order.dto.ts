@@ -7,17 +7,18 @@ import {
   IsNumber,
   IsBoolean,
   IsUUID,
+  IsArray,
 } from 'class-validator';
 
 export class OrderItem {
   @ApiProperty({
     example: 'c7b5a694-d5ff-4d0c-bcd0-8e0af25f1bfc',
-    description: 'The UUID of the organization',
+    description: 'The UUID of the product',
   })
   @IsUUID()
   @Expose()
   @IsNotEmpty()
-  product_uuid?: string;
+  uuid?: string;
 
   @ApiPropertyOptional({
     description: 'Quantity of the product',
@@ -37,7 +38,8 @@ export class CreateOrderDto {
   })
   @Expose()
   @IsNotEmpty()
-  ordert_items?: OrderItem[];
+  @IsArray()
+  order_items?: OrderItem[];
 }
 
 export class UpdateOrderDto {

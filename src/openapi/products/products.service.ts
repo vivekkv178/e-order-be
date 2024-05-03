@@ -22,6 +22,17 @@ export class ProductsService {
     });
   }
 
+  async findAllByOrgId(authDetails: AuthDetailsObject): Promise<Product[]> {
+    return this.productsRepository.find({
+      where: {
+        org_uuid: authDetails.org_uuid,
+      },
+      order: {
+        id: 'ASC',
+      },
+    });
+  }
+
   async findById(id: string): Promise<Product> {
     return this.productsRepository.findOne({
       where: {

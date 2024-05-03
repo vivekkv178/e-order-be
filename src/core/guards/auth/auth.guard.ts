@@ -67,6 +67,7 @@ export class AuthGuard implements CanActivate {
       if (
         decodedToken?.email === 'admin@test.com' ||
         decodedToken?.email === 'orgadmin@test.com' ||
+        decodedToken?.email === 'org2admin@test.com' ||
         decodedToken?.email === 'customer@test.com' ||
         decodedToken?.email === 'test@test.com'
       )

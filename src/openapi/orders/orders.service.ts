@@ -18,7 +18,9 @@ export class OrdersService {
   ) {}
 
   async findAll(): Promise<Order[]> {
-    return this.ordersRepository.find();
+    return this.ordersRepository.find({
+      relations: ['orderItem', 'orderItem.product'],
+    });
   }
 
   async findById(id: string): Promise<Order> {
@@ -39,10 +41,10 @@ export class OrdersService {
     const newOrder = this.ordersRepository.create(data);
     const savedOrder = await this.ordersRepository.save(newOrder);
 
-    for (const itemData of orderData.ordert_items) {
+    for (const itemData of orderData.order_items) {
       const newItem = this.orderItemsRepository.create({
         order_uuid: savedOrder.uuid,
-        product_uuid: itemData?.product_uuid,
+        product_uuid: itemData?.uuid,
         quantity: itemData?.quantity,
       });
       await this.orderItemsRepository.save(newItem);

@@ -88,6 +88,11 @@ export class ProductsController {
     return this.organizationsService.findAll();
   }
 
+  @Get('/org')
+  async findAllByOrgId(@Request() req: any): Promise<Product[]> {
+    return this.organizationsService.findAllByOrgId(req.authDetails);
+  }
+
   @Get(':uuid')
   async findById(@Param() params: GetProductDto): Promise<Product> {
     return this.organizationsService.findById(params.uuid);
