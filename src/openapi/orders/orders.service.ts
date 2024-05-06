@@ -17,10 +17,26 @@ export class OrdersService {
     private readonly orderItemsRepository: Repository<OrderItem>,
   ) {}
 
-  async findAll(): Promise<Order[]> {
+  async findAll(authDetails: AuthDetailsObject): Promise<Order[]> {
     return this.ordersRepository.find({
+      where: {
+        user_uuid: authDetails?.uuid,
+      },
       relations: ['orderItem', 'orderItem.product'],
     });
+  }
+
+  async findOrgOrders(authDetails: AuthDetailsObject): Promise<Order[]> {
+    const queryBuilder = this.ordersRepository.createQueryBuilder('order');
+    queryBuilder.innerJoinAndSelect('order.orderItem', 'orderItem');
+    queryBuilder.innerJoinAndSelect('orderItem.product', 'product');
+    queryBuilder.where('product.org_uuid = :org_uuid', {
+      org_uuid: authDetails?.org_uuid,
+    });
+
+    const results = await queryBuilder.getMany();
+
+    return results;
   }
 
   async findById(id: string): Promise<Order> {

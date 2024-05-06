@@ -84,8 +84,13 @@ export class OrdersController {
   }
 
   @Get()
-  async findAll(): Promise<Order[]> {
-    return this.ordersService.findAll();
+  async findAll(@Request() req: any): Promise<Order[]> {
+    return this.ordersService.findAll(req.authDetails);
+  }
+
+  @Get('/org-orders')
+  async findOrgOrders(@Request() req: any): Promise<Order[]> {
+    return this.ordersService.findOrgOrders(req.authDetails);
   }
 
   @Get(':uuid')

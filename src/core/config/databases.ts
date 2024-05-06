@@ -15,13 +15,11 @@ export default registerAs('databases', () => ({
     extra: {
       max: 10,
     },
-    entities: [
-      join(__dirname, '..', '..', 'openapi', 'entities', '*.{ts,js}'),
-    ],
+    entities: [join(__dirname, '..', '..', 'openapi', 'entities', '*.{ts,js}')],
     migrations: [join(__dirname, '..', 'migrations', 'openapi', '*.{ts,js}')],
     migrationsRun: process.env.TYPEORM_MIGRATIONS_RUN === 'true' || false,
     migrationsTableName: 'nestjs_migrations',
     autoMigrationsRun: true,
-    ssl: true,
+    ssl: process.env.TYPEORM_SSL === 'true' || false,
   },
 }));
